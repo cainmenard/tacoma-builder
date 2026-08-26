@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Tacoma UCA Index
+   Visual direction: a shop spec sheet. Cool blueprint paper, hairline rules,
+   monospaced numbers, and one hi-viz orange borrowed off a jobsite vest.
+   Nothing decorative that a torque table would not have.
+--------------------------------------------------------------------------- */
+
+:root {
+  --paper: #e6eaee;
+  --surface: #f6f8fa;
+  --surface-2: #eceff3;
+  --ink: #0f141a;
+  --ink-2: #4c5966;
+  --ink-3: #7a8895;
+  --rule: #c3ccd5;
+  --rule-strong: #9aa8b4;
+  --accent: #d9490f;
+  --accent-ink: #ffffff;
+  --good: #4e7a3d;
+  --warn: #b0790c;
+  --bad: #ab3722;
+
+  --c1: #35719c;
+  --c2: #d9490f;
+  --c3: #55823f;
+  --c4: #b8830f;
+  --c5: #74497a;
+  --c6: #266f68;
+
+  --shadow: 0 1px 0 rgba(15, 20, 26, 0.06), 0 8px 24px -16px rgba(15, 20, 26, 0.35);
+
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1319;
+    --surface: #161d25;
+    --surface-2: #1c242d;
+    --ink: #e6ecf1;
+    --ink-2: #9aa8b4;
+    --ink-3: #6e7d8a;
+    --rule: #27313b;
+    --rule-strong: #3b4854;
+    --accent: #ff6b2c;
+    --accent-ink: #14100c;
+    --good: #7cae62;
+    --warn: #dcae44;
+    --bad: #e0705a;
+
+    --c1: #62a6d1;
+    --c2: #ff7a3d;
+    --c3: #86b76c;
+    --c4: #e0ae3c;
+    --c5: #ab80af;
+    --c6: #4fa79e;
+
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 12px 32px -20px rgba(0, 0, 0, 0.9);
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0e1319;
+  --surface: #161d25;
+  --surface-2: #1c242d;
+  --ink: #e6ecf1;
+  --ink-2: #9aa8b4;
+  --ink-3: #6e7d8a;
+  --rule: #27313b;
+  --rule-strong: #3b4854;
+  --accent: #ff6b2c;
+  --accent-ink: #14100c;
+  --good: #7cae62;
+  --warn: #dcae44;
+  --bad: #e0705a;
+  --c1: #62a6d1;
+  --c2: #ff7a3d;
+  --c3: #86b76c;
+  --c4: #e0ae3c;
+  --c5: #ab80af;
+  --c6: #4fa79e;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 12px 32px -20px rgba(0, 0, 0, 0.9);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+* { border-color: var(--rule); }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv05";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Faint drafting grid, the way a spec sheet is printed on ruled stock. */
+.grid-paper {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--rule) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--rule) 45%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 0.98;
+}
+
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+
+.hairline { border-top: 1px solid var(--rule); }
+
+/* Focus that survives both themes. */
+:where(a, button, input, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 22px;
+  width: 100%;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 3px;
+  background: var(--rule-strong);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 10px;
+  margin-top: -7px;
+  background: var(--accent);
+  border: none;
+  border-radius: 1px;
+  cursor: grab;
+}
+input[type="range"]::-moz-range-track { height: 3px; background: var(--rule-strong); }
+input[type="range"]::-moz-range-thumb {
+  height: 18px; width: 10px; background: var(--accent);
+  border: none; border-radius: 1px; cursor: grab;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.rise { animation: rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes draw { from { stroke-dashoffset: var(--len); } to { stroke-dashoffset: 0; } }
+
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.scroll-x::-webkit-scrollbar { height: 8px; }
+.scroll-x::-webkit-scrollbar-thumb { background: var(--rule-strong); border-radius: 4px; }

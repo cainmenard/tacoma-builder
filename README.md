@@ -3,7 +3,8 @@
 Interactive buyer's guide for 3rd gen Toyota Tacoma (2016-2023) upper control arms.
 Fourteen arms, four questions to a shortlist, and a cost model you run on your own miles.
 
-**Live:** https://cainmenard.github.io/tacoma-builder/
+**Live:** https://tacoma-builder.vercel.app (Vercel, builds from source on every push)
+**Mirror:** https://cainmenard.github.io/tacoma-builder/ (GitHub Pages, serves the prebuilt single file from `/docs`)
 
 Built from [N64_Wallmaster's TacomaWorld comparison](https://www.tacomaworld.com/threads/what-are-the-best-upper-control-arms-for-you-semi-engineering-level-comparison-for-3rd-gen.869334/)
 plus what the thread asked for: caster angle (Saskabush), the Toyota TRD arm (FunknNasty),
@@ -35,11 +36,26 @@ and it goes on a public list instead of being filled with something plausible.
 
 ## Repo layout
 
-`docs/index.html` is the deployed build: the whole app compiled into one
-self-contained file, no build step, no server. GitHub Pages serves it from `/docs`.
+The Next.js 15 / React 19 / TypeScript / Tailwind v4 source lives at the repo root.
+Vercel builds it on every push to `main`.
 
-The Next.js 15 / React 19 / TypeScript / Tailwind v4 source that produces it lives in
-the project zip; it drops into the repo root without disturbing `docs/`.
+    src/data/sources.ts   every cited URL, in one auditable place
+    src/data/types.ts     the Fact / Gap model that forces sourcing
+    src/data/arms.ts      the 14 arms
+    src/lib/match.ts      matcher scoring rules
+    src/lib/tco.ts        cost model
+
+`docs/index.html` is a standalone mirror: the whole app compiled into one
+self-contained file with no build step, served by GitHub Pages. Regenerate it with
+esbuild + the Tailwind CLI when the source changes.
+
+To add an arm, append to `ARMS` in `src/data/arms.ts`, add its URLs to `S` in
+`src/data/sources.ts`, and list what you could not source in its `gaps` array.
+Charts, filters, the gap board and the cost model all pick it up automatically.
+To close a gap, swap the `gap(...)` call for `f(value, tier, [source])`.
+
+    npm install
+    npm run dev
 
 ## Disclaimer
 
