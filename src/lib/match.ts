@@ -140,18 +140,28 @@ export function scoreArms(a: Answers): Scored[] {
       }
     }
 
-    // --- Duty cycle vs joint family and maintenance.
+    // --- Duty cycle vs joint family and maintenance. The knuckle joint and the frame-side
+    // pivot are scored separately because they are separate parts, and an arm can be
+    // spherical at one end and rubber at the other.
     const mc = known(arm.maintenanceClass) ? arm.maintenanceClass.value : null;
+    const pivot = known(arm.framePivotFamily) ? arm.framePivotFamily.value : null;
     if (a.use === "trail") {
       if (arm.jointFamily === "uniball") lines.push({ label: "Trail duty", points: 5, reason: "Uniball construction is what trail miles ask for." });
       if (arm.jointFamily === "delta-joint") lines.push({ label: "Trail duty", points: 4, reason: "Delta Joint holds up to trail use without full race-part upkeep." });
+      if (pivot === "spherical") lines.push({ label: "Frame pivot", points: 3, reason: "A spherical frame-side pivot takes articulation a bushing has to fight." });
+      if (pivot === "flex-joint") lines.push({ label: "Frame pivot", points: 1, reason: "Flex joints at the frame end move further than rubber before anything binds." });
       if (arm.materialClass === "chromoly") lines.push({ label: "Material", points: 3, reason: "Chromoly for impact loads." });
     } else if (a.use === "street") {
       if (mc === "sealed") lines.push({ label: "Street duty", points: 5, reason: "Sealed joints and street miles are a good match. Nothing to forget." });
       if (arm.jointFamily === "uniball") lines.push({ label: "Street duty", points: -3, reason: "Uniballs transmit more noise and wear faster on pavement than a street truck needs." });
+      if (pivot === "rubber") lines.push({ label: "Frame pivot", points: 4, reason: "Rubber at the frame end is the closest thing here to the way the truck left the factory." });
+      if (pivot === "sealed-pivot") lines.push({ label: "Frame pivot", points: 2, reason: "A sealed frame-side pivot asks for nothing and does not need a grease gun to stay quiet." });
+      if (pivot === "poly") lines.push({ label: "Frame pivot", points: -1, reason: "Polyurethane frame bushings want their zerks hit or they start talking back." });
+      if (pivot === "spherical") lines.push({ label: "Frame pivot", points: -4, reason: "A rod end at the frame end is a metal path from the road into the cab." });
     } else {
       if (mc === "sealed") lines.push({ label: "Mixed duty", points: 3, reason: "Sealed joints survive neglect, which mixed-use trucks get plenty of." });
       if (arm.jointFamily === "delta-joint" || arm.jointFamily === "uniball") lines.push({ label: "Mixed duty", points: 2, reason: "Enough joint for the dirt half of the split." });
+      if (pivot === "sealed-pivot") lines.push({ label: "Frame pivot", points: 2, reason: "Sealed at the frame end too, so there is nothing on the schedule at either end." });
     }
 
     // --- Willingness to service.
@@ -180,7 +190,7 @@ export function scoreArms(a: Answers): Scored[] {
     if (praise) lines.push({ label: "Field reports", points: 2 * praise, reason: "Owners running these have reported back positively." });
 
     // --- How much of this arm's spec sheet is actually knowable.
-    const gapPenalty = Math.min(arm.gaps.length, 7);
+    const gapPenalty = Math.min(arm.gaps.length, 8);
     lines.push({
       label: "Data quality",
       points: -gapPenalty,

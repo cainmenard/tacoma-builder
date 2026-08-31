@@ -91,7 +91,7 @@ export default function Page() {
             id="table"
             index="02"
             title="Every arm, every number, every source"
-            lede="Sort it, filter it, pin up to three for a side-by-side. The small bar next to each figure is how well sourced it is: four bars means the manufacturer published it, one bar means it came out of the original thread analysis and nobody has verified it."
+            lede="Sort it, filter it, pin up to three for a side-by-side. Every arm has two pivots and they are listed separately: the joint at the knuckle, which is what the marketing is about, and the bushing at the frame, which is what you hear. The small bar next to each figure is how well sourced it is: four bars means the manufacturer published it, one bar means it came out of the original thread analysis and nobody has verified it."
           />
           <div className="mt-7">
             <CompareTable pinned={pinned} onTogglePin={togglePin} onOpen={setOpen} />
@@ -143,6 +143,9 @@ export default function Page() {
                 Nothing here is a dyno sheet. Manufacturer figures are marketing until somebody measures them, forum reports
                 are a selection-biased sample because nobody starts a thread to say their arms still work, and the
                 articulation and weight numbers all trace to one person&apos;s analysis rather than a scale and a protractor.
+                Nobody publishes an NVH or ride-quality measurement for any arm on this list, so there is no ride column
+                and no quietness score here: what the frame-side pivot is made of is as close as the published data gets,
+                and the conclusion from there is yours to draw.
                 The sourcing meters exist so you can see which is which before you spend a thousand dollars.
               </p>
             </div>

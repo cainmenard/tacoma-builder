@@ -122,6 +122,7 @@ function normalize(g: string): string {
   if (s.includes("price") || s.includes("fitment")) return "Price and availability";
   if (s.includes("durability") || s.includes("failure") || s.includes("tire")) return "Independent durability evidence";
   if (s.includes("retrofit") || s.includes("2016-2021")) return "Fitment confirmation";
+  if (s.includes("frame-side") || s.includes("pivot") || s.includes("bushing")) return "Frame-side pivot";
   if (s.includes("maintenance")) return "Maintenance requirement";
   if (s.includes("ball joint brand")) return "Joint brand and serviceability";
   return g;

@@ -2,13 +2,17 @@
 
 import { useMemo, useState } from "react";
 import { ARMS } from "@/data/arms";
-import { known } from "@/data/types";
-import type { Arm } from "@/data/types";
+import { known, PIVOT_LABEL } from "@/data/types";
+import type { Arm, PivotFamily } from "@/data/types";
 import { ConfidenceMeter } from "./Primitives";
 import { money } from "@/lib/format";
 
 type SortKey = "price" | "caster" | "articulation" | "weight" | "gaps" | "brand";
 type MaintFilter = "all" | "sealed" | "greaseable";
+type PivotFilter = "all" | PivotFamily;
+
+/** Frame-side pivot types that at least one arm in the dataset actually publishes. */
+const PIVOT_FILTERS: PivotFilter[] = ["all", "rubber", "poly", "sealed-pivot", "spherical", "flex-joint"];
 
 const MAINT_LABEL: Record<string, string> = {
   sealed: "Sealed",
@@ -28,6 +32,7 @@ export function CompareTable({
   const [sort, setSort] = useState<SortKey>("price");
   const [asc, setAsc] = useState(true);
   const [maint, setMaint] = useState<MaintFilter>("all");
+  const [pivot, setPivot] = useState<PivotFilter>("all");
   const [adjOnly, setAdjOnly] = useState(false);
   const [casterOnly, setCasterOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState(1600);
@@ -36,6 +41,7 @@ export function CompareTable({
     let out = ARMS.filter((a) => {
       if (maint === "sealed" && !(known(a.maintenanceClass) && a.maintenanceClass.value !== "greaseable")) return false;
       if (maint === "greaseable" && !(known(a.maintenanceClass) && a.maintenanceClass.value === "greaseable")) return false;
+      if (pivot !== "all" && !(known(a.framePivotFamily) && a.framePivotFamily.value === pivot)) return false;
       if (adjOnly && !(known(a.casterAdjustable) && a.casterAdjustable.value)) return false;
       if (casterOnly && !known(a.casterDeg)) return false;
       if (known(a.price) && a.price.value > maxPrice) return false;
@@ -57,7 +63,9 @@ export function CompareTable({
         : (asc ? 1 : -1) * (num(x) - num(y))
     );
     return out;
-  }, [sort, asc, maint, adjOnly, casterOnly, maxPrice]);
+  }, [sort, asc, maint, pivot, adjOnly, casterOnly, maxPrice]);
+
+  const unclassified = ARMS.filter((a) => !known(a.framePivotFamily)).length;
 
   function head(key: SortKey, label: string, align: "left" | "right" = "right") {
     const active = sort === key;
@@ -99,6 +107,21 @@ export function CompareTable({
           ))}
         </div>
 
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="eyebrow">Frame pivot</span>
+          {PIVOT_FILTERS.map((pv) => (
+            <button
+              key={pv}
+              onClick={() => setPivot(pv)}
+              className={`num rounded-sm border px-2 py-1 text-[10px] uppercase tracking-[0.09em] ${
+                pivot === pv ? "border-accent bg-accent text-accent-ink" : "border-rule text-ink-2 hover:text-ink"
+              }`}
+            >
+              {pv === "all" ? "Any" : PIVOT_LABEL[pv]}
+            </button>
+          ))}
+        </div>
+
         <label className="flex cursor-pointer items-center gap-2 text-[13px]">
           <input type="checkbox" checked={adjOnly} onChange={(e) => setAdjOnly(e.target.checked)} className="accent-[var(--accent)]" />
           Adjustable caster only
@@ -122,13 +145,18 @@ export function CompareTable({
         </label>
 
         <div className="num text-[12px] text-ink-3">
-          <span className="text-accent">{rows.length}</span>/14 shown
+          <span className="text-accent">{rows.length}</span>/{ARMS.length} shown
+          {pivot !== "all" && unclassified > 0 && (
+            <span className="ml-2 text-ink-3">
+              · {unclassified} arms publish nothing about the frame end
+            </span>
+          )}
         </div>
       </div>
 
       {/* Table */}
       <div className="card scroll-x">
-        <table className="w-full min-w-[860px] border-collapse text-[13px]">
+        <table className="w-full min-w-[980px] border-collapse text-[13px]">
           <thead>
             <tr className="border-b border-rule-strong">
               <th className="w-9 px-3 py-2" />
@@ -137,7 +165,8 @@ export function CompareTable({
               {head("caster", "Caster")}
               {head("articulation", "Artic.")}
               {head("weight", "Weight lb")}
-              <th className="px-3 py-2 text-left font-normal"><span className="eyebrow">Joint</span></th>
+              <th className="px-3 py-2 text-left font-normal"><span className="eyebrow">Knuckle joint</span></th>
+              <th className="px-3 py-2 text-left font-normal"><span className="eyebrow">Frame pivot</span></th>
               <th className="px-3 py-2 text-left font-normal"><span className="eyebrow">Service</span></th>
               {head("gaps", "Gaps")}
             </tr>
@@ -193,6 +222,16 @@ export function CompareTable({
                     muted={!known(a.weightLbPair)}
                   />
                   <td className="px-3 py-2.5 text-ink-2">{a.jointFamily.replace("-", " ")}</td>
+                  <td className="px-3 py-2.5 text-ink-2">
+                    {known(a.framePivotFamily) ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        {PIVOT_LABEL[a.framePivotFamily.value]}
+                        <ConfidenceMeter c={a.framePivotFamily.confidence} />
+                      </span>
+                    ) : (
+                      <span className="italic text-ink-3">not published</span>
+                    )}
+                  </td>
                   <td className="px-3 py-2.5 text-ink-2">
                     {known(a.maintenanceClass) ? MAINT_LABEL[a.maintenanceClass.value] : <span className="italic text-ink-3">unknown</span>}
                   </td>

@@ -62,6 +62,29 @@ export type MaintenanceClass = "sealed" | "low" | "greaseable";
 export type JointFamily = "ball-joint" | "uniball" | "flex-joint" | "delta-joint";
 export type MaterialClass = "steel" | "chromoly" | "aluminum";
 
+/**
+ * The frame-side pivot, where the arm bolts to the chassis. A different part from
+ * jointFamily, which is the joint at the knuckle. This is the one that decides how much
+ * of the road you hear, and it wears and gets replaced on its own schedule.
+ *
+ * Nobody publishes an NVH measurement for any arm in this comparison, so this field
+ * records what the pivot is and stops there. It is a gap unless a source names the type.
+ */
+export type PivotFamily =
+  | "rubber"        // bonded rubber or synthetic elastomer, OE style
+  | "poly"          // polyurethane, usually with a zerk
+  | "sealed-pivot"  // sealed self-lubricating cartridge: GIIRO, SilentSpin
+  | "flex-joint"    // SPC xAxis and equivalents
+  | "spherical";    // uniball or rod end at the frame end
+
+export const PIVOT_LABEL: Record<PivotFamily, string> = {
+  rubber: "Rubber",
+  poly: "Polyurethane",
+  "sealed-pivot": "Sealed pivot",
+  "flex-joint": "Flex joint",
+  spherical: "Spherical",
+};
+
 export interface Arm {
   id: string;
   brand: string;
@@ -79,6 +102,11 @@ export interface Arm {
 
   jointName: Fact<string>;
   jointFamily: JointFamily;
+
+  /** Frame-side pivot: what it is called, and who says so. */
+  framePivotName: Maybe<string>;
+  /** Frame-side pivot type, for filtering and comparison. Never inferred from the brand. */
+  framePivotFamily: Maybe<PivotFamily>;
 
   /** Degrees of caster the arm adds, or the range if adjustable. */
   casterDeg: Maybe<[number, number]>;

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:mirror": "node scripts/build-mirror.mjs",
     "start": "next start",
     "lint": "next lint"
   },
