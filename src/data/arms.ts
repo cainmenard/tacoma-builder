@@ -141,6 +141,20 @@ export const ARMS: Arm[] = [
         sources: [S.jdFab, S.trailTacomaJdFab],
       },
     ],
+    variants: [
+      {
+        label: "Standard inner pivots",
+        price: f(699.99, "manufacturer", [S.jdFab]),
+        changes: "OEM Toyota rubber bushings at the frame end. JD Fab rates them to 200,000 miles and says they will never squeak.",
+      },
+      {
+        label: "Sealed uniball inner pivots",
+        price: f(949.99, "manufacturer", [S.jdFab]),
+        changes: "$250 more swaps the rubber inner bushings for sealed uniballs, which JD Fab calls the hardcore off-road option. It also changes what the arm rides like, at both ends.",
+        framePivotName: f("Sealed uniball inner pivots", "manufacturer", [S.jdFabBushings]),
+        framePivotFamily: f("spherical", "manufacturer", [S.jdFabBushings]),
+      },
+    ],
     gaps: ["Caster in degrees", "Articulation", "Component weight", "Grease interval", "Rebuild kit price", "Warranty", "Any independent durability report at mileage"],
   },
   {
@@ -333,7 +347,7 @@ export const ARMS: Arm[] = [
     framePivotName: f("Polyurethane frame pivot bushings with greaseable zerk fittings", "retailer", [S.accutuneCamburg], "Carried from Camburg's standard X-Joint listing, which shares the arm. No XL-specific source describes the frame end."),
     framePivotFamily: f("poly", "retailer", [S.accutuneCamburg], "Carried from the standard X-Joint. The XL is a larger ball joint, which is a change at the knuckle, not at the frame."),
     casterDeg: gap("A degree figure. Camburg says only 'we build more caster'.", [S.camburgXL]),
-    casterAdjustable: f(false, "community", [S.shockSurplus], "The XL refers to a physically larger ball joint, not an adjuster."),
+    casterAdjustable: f(false, "community", [S.shockSurplus], "The XL refers to a physically larger ball joint, not an adjuster. Arguably this whole entry is a variant of the X-Joint above rather than a separate arm, which is a call worth making before the shock data lands and multiplies the problem."),
     casterMechanism: f("Fixed, larger joint for high misalignment", "retailer", [S.camburgXL]),
     articulationDeg: f(80, "estimate", [S.originalThread]),
     weightLbPair: gap("A published or measured weight."),
@@ -477,3 +491,18 @@ export const ARMS: Arm[] = [
 ];
 
 export const ARMS_BY_ID = Object.fromEntries(ARMS.map((a) => [a.id, a]));
+
+/**
+ * How many sourced fields across the whole dataset sit at a given tier.
+ * Walks the arm objects rather than naming fields, so it keeps counting
+ * correctly as fields are added.
+ */
+export function fieldsAtTier(tier: Confidence): number {
+  let n = 0;
+  for (const arm of ARMS) {
+    for (const v of Object.values(arm)) {
+      if (v && typeof v === "object" && "confidence" in v && (v as { confidence: Confidence }).confidence === tier) n++;
+    }
+  }
+  return n;
+}

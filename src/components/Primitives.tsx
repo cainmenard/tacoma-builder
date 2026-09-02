@@ -5,6 +5,7 @@ import { CONFIDENCE_LABEL, CONFIDENCE_RANK, known } from "@/data/types";
 import type { Confidence, Maybe, Source } from "@/data/types";
 
 const CONF_COLOR: Record<Confidence, string> = {
+  "independent-test": "var(--c6)",
   manufacturer: "var(--good)",
   retailer: "var(--c1)",
   community: "var(--warn)",
@@ -13,19 +14,21 @@ const CONF_COLOR: Record<Confidence, string> = {
 };
 
 /**
- * Four-segment sourcing meter. Every number on this site wears one, so you can
- * tell a manufacturer spec from a forum guess without reading a footnote.
+ * Five-segment sourcing meter. Every number on this site wears one, so you can
+ * tell a measured figure from a manufacturer spec from a forum guess without
+ * reading a footnote. The fifth segment only lights up for a number somebody
+ * actually measured, which is why most of this board tops out at four.
  */
 export function ConfidenceMeter({ c, showLabel = false }: { c: Confidence; showLabel?: boolean }) {
   const filled = CONFIDENCE_RANK[c];
   return (
     <span className="inline-flex items-center gap-1.5 align-middle" title={CONFIDENCE_LABEL[c]}>
       <span className="inline-flex items-end gap-[2px]" aria-hidden>
-        {[1, 2, 3, 4].map((i) => (
+        {[1, 2, 3, 4, 5].map((i) => (
           <span
             key={i}
             style={{
-              height: 3 + i * 2,
+              height: 2 + i * 2,
               width: 3,
               background: i <= filled ? CONF_COLOR[c] : "var(--rule-strong)",
               opacity: i <= filled ? 1 : 0.45,

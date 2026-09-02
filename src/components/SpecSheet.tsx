@@ -57,6 +57,31 @@ export function SpecSheet({ id, onClose }: { id: string | null; onClose: () => v
 
           <Grid arm={arm} />
 
+          {arm.variants && arm.variants.length > 1 && (
+            <section className="mt-7">
+              <div className="eyebrow mb-2.5">Sold in {arm.variants.length} configurations</div>
+              {arm.variants.map((v) => (
+                <div key={v.label} className="mb-2.5 rounded-sm border border-rule bg-surface p-3.5">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-[14px] font-medium">{v.label}</span>
+                    <span className="num text-[13px]">
+                      <SourcedValue fact={v.price} render={(x: number) => money(x)} fallback="no price" />
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[13.5px] leading-relaxed text-ink-2">{v.changes}</p>
+                  {known(v.framePivotFamily) && (
+                    <div className="mt-1.5 eyebrow">
+                      Frame pivot becomes {PIVOT_LABEL[v.framePivotFamily.value]}
+                    </div>
+                  )}
+                </div>
+              ))}
+              <p className="text-[13px] leading-relaxed text-ink-3">
+                Everything above this block describes the first configuration.
+              </p>
+            </section>
+          )}
+
           {arm.fieldReports.length > 0 && (
             <section className="mt-7">
               <div className="eyebrow mb-2.5">What owners and sources actually report</div>

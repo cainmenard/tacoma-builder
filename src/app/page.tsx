@@ -11,7 +11,7 @@ import { MetricBoard } from "@/components/Charts";
 import { Gaps } from "@/components/Gaps";
 import { SectionHead } from "@/components/Primitives";
 import { CasterStrip } from "@/components/CasterStrip";
-import { ARMS } from "@/data/arms";
+import { ARMS, fieldsAtTier } from "@/data/arms";
 import { known } from "@/data/types";
 import { S } from "@/data/sources";
 
@@ -28,6 +28,7 @@ export default function Page() {
     setPinned((p) => (p.includes(id) ? p.filter((x) => x !== id) : p.length >= 3 ? [...p.slice(1), id] : [...p, id]));
 
   const noCaster = ARMS.filter((a) => !known(a.casterDeg)).length;
+  const measured = fieldsAtTier("independent-test");
   const prices = ARMS.filter((a) => known(a.price)).map((a) => a.price.value as number);
 
   return (
@@ -54,6 +55,7 @@ export default function Page() {
             <Stat n={`$${Math.min(...prices)}–$${Math.max(...prices).toLocaleString()}`} l="street price range, Aug 2026" />
             <Stat n={`${noCaster}`} l="with no published caster figure" accent />
             <Stat n={`${ARMS.reduce((n, a) => n + a.gaps.length, 0)}`} l="specs nobody publishes" accent />
+            <Stat n={`${measured}`} l="figures anybody has measured on a truck" accent />
           </div>
 
           <div className="mt-9 flex flex-wrap gap-2">
@@ -91,7 +93,7 @@ export default function Page() {
             id="table"
             index="02"
             title="Every arm, every number, every source"
-            lede="Sort it, filter it, pin up to three for a side-by-side. Every arm has two pivots and they are listed separately: the joint at the knuckle, which is what the marketing is about, and the bushing at the frame, which is what you hear. The small bar next to each figure is how well sourced it is: four bars means the manufacturer published it, one bar means it came out of the original thread analysis and nobody has verified it."
+            lede="Sort it, filter it, pin up to three for a side-by-side. Every arm has two pivots and they are listed separately: the joint at the knuckle, which is what the marketing is about, and the bushing at the frame, which is what you hear. The small bar next to each figure is how well sourced it is: five bars means somebody measured it on a truck and published how, four means the manufacturer said so, one means it came out of the original thread analysis and nobody has checked it."
           />
           <div className="mt-7">
             <CompareTable pinned={pinned} onTogglePin={togglePin} onOpen={setOpen} />
@@ -143,6 +145,9 @@ export default function Page() {
                 Nothing here is a dyno sheet. Manufacturer figures are marketing until somebody measures them, forum reports
                 are a selection-biased sample because nobody starts a thread to say their arms still work, and the
                 articulation and weight numbers all trace to one person&apos;s analysis rather than a scale and a protractor.
+                There is a tier above &ldquo;the manufacturer says so&rdquo; for a figure somebody measured on a truck and
+                published the method for, and right now {measured} of the fields on this board qualify. That is the honest
+                state of this market, not a gap in the research.
                 Nobody publishes an NVH or ride-quality measurement for any arm on this list, so there is no ride column
                 and no quietness score here: what the frame-side pivot is made of is as close as the published data gets,
                 and the conclusion from there is yours to draw.

@@ -11,6 +11,7 @@ type Metric = "caster" | "articulation" | "weight" | "price";
 
 /** Bars are colored by how well sourced the number is, not by row order. */
 const BAR_COLOR: Record<Confidence, string> = {
+  "independent-test": "var(--c3)",
   manufacturer: "var(--c1)",
   retailer: "var(--c6)",
   community: "var(--c4)",

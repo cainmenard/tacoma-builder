@@ -8,13 +8,15 @@
  */
 
 export type Confidence =
-  | "manufacturer" // published by the company that makes the part
-  | "retailer"     // a seller's listing
-  | "community"    // forum reports, independent reviews, tuner write-ups
-  | "estimate"     // N64_Wallmaster's original analysis, not independently sourced
-  | "gap";         // nobody publishes this
+  | "independent-test" // somebody put it on a truck, measured it, and published the method
+  | "manufacturer"     // published by the company that makes the part
+  | "retailer"         // a seller's listing
+  | "community"        // forum reports, independent reviews, tuner write-ups
+  | "estimate"         // N64_Wallmaster's original analysis, not independently sourced
+  | "gap";             // nobody publishes this
 
 export const CONFIDENCE_LABEL: Record<Confidence, string> = {
+  "independent-test": "Independently measured",
   manufacturer: "Manufacturer published",
   retailer: "Retailer listing",
   community: "Community / third-party",
@@ -23,12 +25,16 @@ export const CONFIDENCE_LABEL: Record<Confidence, string> = {
 };
 
 export const CONFIDENCE_RANK: Record<Confidence, number> = {
+  "independent-test": 5,
   manufacturer: 4,
   retailer: 3,
   community: 2,
   estimate: 1,
   gap: 0,
 };
+
+/** The top tier is the only one the app cannot fill in from a web page. */
+export const TOP_TIER: Confidence = "independent-test";
 
 export interface Source {
   label: string;
@@ -85,6 +91,25 @@ export const PIVOT_LABEL: Record<PivotFamily, string> = {
   spherical: "Spherical",
 };
 
+/**
+ * A configuration of the same part, sold at a different price.
+ *
+ * An arm or a shock offered with and without an option is one product, not two.
+ * Listing it as two rows double-counts it in every chart; burying it in a note
+ * hides the choice from the person making it. So it goes here instead, and a
+ * variant may override any field the option actually changes.
+ */
+export interface Variant {
+  label: string;
+  price: Maybe<number>;
+  /** What the money buys, in one line. */
+  changes: string;
+  framePivotName?: Maybe<string>;
+  framePivotFamily?: Maybe<PivotFamily>;
+  jointName?: Fact<string>;
+  jointFamily?: JointFamily;
+}
+
 export interface Arm {
   id: string;
   brand: string;
@@ -136,6 +161,9 @@ export interface Arm {
     text: string;
     sources: Source[];
   }[];
+
+  /** Configurations of this same arm at different prices. Base fields describe the first. */
+  variants?: Variant[];
 
   /** Everything the app could not source for this arm. */
   gaps: string[];

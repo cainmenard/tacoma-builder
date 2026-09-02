@@ -22,11 +22,17 @@ end of the arm, so both ends are recorded — `jointName` / `jointFamily` for th
 the knuckle, `framePivotName` / `framePivotFamily` for the bushing at the frame — and the
 ride conclusion is left to the reader.
 
-    manufacturer  published by the company that makes the part
-    retailer      a seller listing
-    community     forum reports, independent reviews, tuner write-ups
-    estimate      the original thread analysis, not independently verified
-    gap           nobody publishes this
+    independent-test  somebody measured it on a truck and published the method
+    manufacturer      published by the company that makes the part
+    retailer          a seller listing
+    community         forum reports, independent reviews, tuner write-ups
+    estimate          the original thread analysis, not independently verified
+    gap               nobody publishes this
+
+Zero fields currently sit in the top tier. That is not a research backlog, it is
+the state of the market: nobody publishes a measured figure for any of these arms.
+The tier exists so that when a back-to-back test does get published, it outranks
+the marketing copy instead of sitting next to it.
 
 63 fields across 14 arms currently sit in the gap tier. That count is the point.
 
@@ -59,6 +65,11 @@ moment `src/data/arms.ts` changes, so regenerate it in the same commit:
 
 That script (`scripts/build-mirror.mjs`) bundles the app with esbuild, runs the
 Tailwind CLI over `src/app/globals.css`, and wraps both in `scripts/mirror-shell.html`.
+
+An arm sold in more than one configuration gets a `variants` array rather than a
+second row in `ARMS`, so it is not double-counted in the charts. A variant may
+override any field the option actually changes. JD Fabrication is the worked
+example: the $949.99 build swaps rubber inner bushings for sealed uniballs.
 
 To add an arm, append to `ARMS` in `src/data/arms.ts`, add its URLs to `S` in
 `src/data/sources.ts`, and list what you could not source in its `gaps` array.
