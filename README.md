@@ -1,4 +1,4 @@
-# Tacoma UCA Index
+# Tacoma Parts Index
 
 Interactive buyer's guide for 3rd gen Toyota Tacoma (2016-2023) suspension.
 Fourteen upper control arms and six shocks, four questions to a shortlist, and a cost

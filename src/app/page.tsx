@@ -41,7 +41,7 @@ export default function Page() {
       {/* ---------- Hero: the caster gap, stated as a number ---------- */}
       <section id="top" className="grid-paper border-b border-rule-strong">
         <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <div className="eyebrow">3rd gen Tacoma · 2016–2023 · upper control arms</div>
+          <div className="eyebrow">3rd gen Tacoma · 2016–2023 · upper control arms and shocks</div>
           <h1 className="display mt-3 max-w-[19ch] text-[clamp(1.9rem,5.2vw,3.5rem)]">
             {NUMWORD[ARMS.length]} arms. {NUMWORD[noCaster]} of them will not tell you how much caster you get.
           </h1>

@@ -6,6 +6,7 @@ const NAV = [
   ["matcher", "Matcher"],
   ["table", "Compare"],
   ["cost", "Cost"],
+  ["shocks", "Shocks"],
   ["charts", "Charts"],
   ["gaps", "Gaps"],
 ];
@@ -14,6 +15,7 @@ export function Header() {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
+    // Key kept from the old name on purpose. See the note in layout.tsx.
     const stored = localStorage.getItem("uca-theme");
     const initial = stored ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     setDark(initial === "dark");
@@ -32,7 +34,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-rule bg-[color-mix(in_srgb,var(--paper)_88%,transparent)] backdrop-blur-md">
       <div className="mx-auto flex max-w-[1180px] items-center gap-4 px-4 py-2.5 sm:px-6">
         <a href="#top" className="num shrink-0 text-[12px] font-bold tracking-[0.06em]">
-          UCA<span style={{ color: "var(--accent)" }}>·</span>INDEX
+          PARTS<span style={{ color: "var(--accent)" }}>·</span>INDEX
         </a>
         <nav className="scroll-x flex flex-1 gap-1">
           {NAV.map(([id, label]) => (
