@@ -1,7 +1,7 @@
 "use client";
 
 import { ARMS_BY_ID } from "@/data/arms";
-import { known } from "@/data/types";
+import { known, PIVOT_LABEL } from "@/data/types";
 import type { Arm } from "@/data/types";
 import { CasterGauge } from "./CasterGauge";
 import { ConfidenceMeter } from "./Primitives";
@@ -40,7 +40,19 @@ const ROWS: {
       : { text: "not published", conf: "gap", muted: true },
   },
   { label: "Material", get: (a) => ({ text: a.material.value, conf: a.material.confidence }) },
-  { label: "Joint", get: (a) => ({ text: a.jointName.value, conf: a.jointName.confidence }) },
+  { label: "Knuckle joint", get: (a) => ({ text: a.jointName.value, conf: a.jointName.confidence }) },
+  {
+    label: "Frame pivot",
+    get: (a) => known(a.framePivotName)
+      ? { text: a.framePivotName.value, conf: a.framePivotName.confidence }
+      : { text: "not published", conf: "gap", muted: true },
+  },
+  {
+    label: "Pivot type",
+    get: (a) => known(a.framePivotFamily)
+      ? { text: PIVOT_LABEL[a.framePivotFamily.value], conf: a.framePivotFamily.confidence }
+      : { text: "cannot be classified", conf: "gap", muted: true },
+  },
   {
     label: "Service",
     get: (a) => known(a.maintenanceClass)

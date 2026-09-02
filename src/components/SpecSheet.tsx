@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { ARMS_BY_ID } from "@/data/arms";
-import { known } from "@/data/types";
+import { known, PIVOT_LABEL } from "@/data/types";
 import type { Arm } from "@/data/types";
 import { CasterGauge } from "./CasterGauge";
 import { SourcedValue, SourceLink, ConfidenceMeter } from "./Primitives";
@@ -120,8 +120,21 @@ function Grid({ arm }: { arm: Arm }) {
       <Row label="Material">
         <SourcedValue fact={arm.material} render={(v: string) => v} />
       </Row>
-      <Row label="Joint">
+      <Row label="Knuckle joint">
         <SourcedValue fact={arm.jointName} render={(v: string) => v} />
+      </Row>
+      <Row label="Frame-side pivot">
+        <SourcedValue
+          fact={arm.framePivotName}
+          render={(v: string) => v}
+          fallback="Nobody publishes what is at the frame end"
+        />
+        {known(arm.framePivotFamily) && (
+          <span className="ml-2 num text-[13px] text-ink-3">
+            {PIVOT_LABEL[arm.framePivotFamily.value]}
+            <ConfidenceMeter c={arm.framePivotFamily.confidence} />
+          </span>
+        )}
       </Row>
       <Row label="Articulation">
         <SourcedValue fact={arm.articulationDeg} render={(v: number) => `${v}°`} />

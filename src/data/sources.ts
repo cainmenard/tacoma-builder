@@ -168,6 +168,55 @@ export const S = {
     label: "TacomaWorld, OEM TRD Pro upper control arms",
     url: "https://www.tacomaworld.com/threads/oem-trd-pro-upper-control-arms.847722/",
   },
+  // --- Frame-side pivots. Every one of these quotes is about the bushing at the frame
+  // end, not the joint at the knuckle.
+  jbaBushings: {
+    label: "JBA Offroad, EZ Lube bushing spec",
+    url: "https://jbaoffroad.com/jba-std-high-caster-upper-a-arms-for-toyota-tacoma-05-plus",
+    quote: "8 synthetic elastomer a-arm bushings … 2 grease ports for the JBA EZ lube bushings, and 1 grease port for the ball joint",
+  },
+  omeGiiro: {
+    label: "ARB, UCA0005 feature list",
+    url: "https://store.arbusa.com/upper-control-arms-uca0005/",
+    quote: "GIIRO Bushings, Free-Pivoting, Grease-Free and Maintenance-Free",
+  },
+  jdFabBushings: {
+    label: "JD Fabrication, inner pivot bushings",
+    url: "https://jdfabrication.com/products/tacoma-2016-upper-arm",
+    quote:
+      "Our standard arms use OEM bushings on the inner pivots … These bushings can last up to 200,000 miles, will never squeak and do not require maintenance.",
+  },
+  iconTubularBushings: {
+    label: "ICON 58450DJ, kit contents",
+    url: "https://iconvehicledynamics.com/products/58450dj",
+    quote: "Serviceable Dual Stage Bushings … CNC Machined Bushing Housings and Sleeves",
+  },
+  iconBilletRodEnds: {
+    label: "ICON 58550DJ, feature list",
+    url: "https://iconvehicledynamics.com/products/58550dj",
+    quote: "High-Quality PTFE-lined ¾\" FK Rod Ends",
+  },
+  dirtKingSilentSpin: {
+    label: "Dirt King, SilentSpin bushing description",
+    url: "https://dirtking.com/products/billet-upper-control-arms-dk-811923",
+    quote:
+      "The maintenance-free Probearing SilentSpin bushings provide superior ride comfort, with a polyurethane outer layer that dampens road noise and a self-lubricating composite core for smooth, quiet operation.",
+  },
+  dobinsonsSteelBushings: {
+    label: "ExtremeTerrain, Dobinsons UCA59-003K contents",
+    url: "https://www.extremeterrain.com/dobinsons-tacoma-front-upper-control-arms-uca59-003k.html",
+    quote: "OE style rubber frame bushings (installed)",
+  },
+  accutuneCamburg: {
+    label: "AccuTune Off-Road, Camburg X-Joint CAM-310078",
+    url: "https://accutuneoffroad.com/product/camburg-upper-control-arm-balljoint-upper-05-tacoma/",
+    quote: "Polyurethane frame pivot bushings with grease-able zerk fittings",
+  },
+  overlandOutfittersDobinsonsAlu: {
+    label: "Overland Outfitters, Dobinsons UCA59-203K",
+    url: "https://overlandoutfittersusa.com/products/copy-of-dobinsons-2003-2023-4runner-front-adjustable-billet-upper-control-arm-kit",
+    quote: "Rubber bushes and balljoints are designed to be maintenance free",
+  },
   jdFab: {
     label: "JD Fabrication, Tacoma 2016+ upper arm",
     url: "https://jdfabrication.com/products/tacoma-2016-upper-arm",

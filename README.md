@@ -16,20 +16,26 @@ Every field carries a source URL and a confidence tier. Nothing is estimated int
 existence. Where research could not find a figure, the field is a gap, the UI says so,
 and it goes on a public list instead of being filled with something plausible.
 
+That rule is why there is no ride-quality or NVH score anywhere in this app. Nobody
+publishes a measurement for any of these arms. What is published is the pivot at each
+end of the arm, so both ends are recorded — `jointName` / `jointFamily` for the joint at
+the knuckle, `framePivotName` / `framePivotFamily` for the bushing at the frame — and the
+ride conclusion is left to the reader.
+
     manufacturer  published by the company that makes the part
     retailer      a seller listing
     community     forum reports, independent reviews, tuner write-ups
     estimate      the original thread analysis, not independently verified
     gap           nobody publishes this
 
-61 fields across 14 arms currently sit in the gap tier. That count is the point.
+63 fields across 14 arms currently sit in the gap tier. That count is the point.
 
 ## Sections
 
 | Section | What it does |
 |---|---|
 | Matcher | Four questions produce a scored, auditable shortlist |
-| Compare | Sortable, filterable table; pin up to 3 for side-by-side |
+| Compare | Sortable, filterable table; pin up to 3 for side-by-side. The knuckle joint and the frame-side pivot are separate columns |
 | Cost | Purchase + grease + joint replacement + alignments over your mileage and rates |
 | Charts | One metric at a time, bars colored by sourcing strength |
 | Gaps | Every unpublished spec, grouped by what would close it |
@@ -46,8 +52,13 @@ Vercel builds it on every push to `main`.
     src/lib/tco.ts        cost model
 
 `docs/index.html` is a standalone mirror: the whole app compiled into one
-self-contained file with no build step, served by GitHub Pages. Regenerate it with
-esbuild + the Tailwind CLI when the source changes.
+self-contained file with no build step, served by GitHub Pages. It goes stale the
+moment `src/data/arms.ts` changes, so regenerate it in the same commit:
+
+    npm run build:mirror
+
+That script (`scripts/build-mirror.mjs`) bundles the app with esbuild, runs the
+Tailwind CLI over `src/app/globals.css`, and wraps both in `scripts/mirror-shell.html`.
 
 To add an arm, append to `ARMS` in `src/data/arms.ts`, add its URLs to `S` in
 `src/data/sources.ts`, and list what you could not source in its `gaps` array.
