@@ -1,7 +1,8 @@
 # Tacoma UCA Index
 
-Interactive buyer's guide for 3rd gen Toyota Tacoma (2016-2023) upper control arms.
-Fourteen arms, four questions to a shortlist, and a cost model you run on your own miles.
+Interactive buyer's guide for 3rd gen Toyota Tacoma (2016-2023) suspension.
+Fourteen upper control arms and six shocks, four questions to a shortlist, and a cost
+model you run on your own miles.
 
 **Live:** https://tacoma-builder.vercel.app (Vercel, builds from source on every push)
 **Mirror:** https://cainmenard.github.io/tacoma-builder/ (GitHub Pages, serves the prebuilt single file from `/docs`)
@@ -34,7 +35,7 @@ the state of the market: nobody publishes a measured figure for any of these arm
 The tier exists so that when a back-to-back test does get published, it outranks
 the marketing copy instead of sitting next to it.
 
-63 fields across 14 arms currently sit in the gap tier. That count is the point.
+97 fields across 14 arms and 6 shocks currently sit in the gap tier. That count is the point.
 
 ## Sections
 
@@ -44,7 +45,8 @@ the marketing copy instead of sitting next to it.
 | Compare | Sortable, filterable table; pin up to 3 for side-by-side. The knuckle joint and the frame-side pivot are separate columns |
 | Cost | Purchase + grease + joint replacement + alignments over your mileage and rates |
 | Charts | One metric at a time, bars colored by sourcing strength |
-| Gaps | Every unpublished spec, grouped by what would close it |
+| Shocks | Six coilovers on the same rules. Rebuild interval, adjuster configurations, coil rates |
+| Gaps | Every unpublished spec across both, grouped by what would close it |
 
 ## Repo layout
 
@@ -54,8 +56,9 @@ Vercel builds it on every push to `main`.
     src/data/sources.ts   every cited URL, in one auditable place
     src/data/types.ts     the Fact / Gap model that forces sourcing
     src/data/arms.ts      the 14 arms
+    src/data/shocks.ts    the 6 shocks
     src/lib/match.ts      matcher scoring rules
-    src/lib/tco.ts        cost model
+    src/lib/tco.ts        cost model, arms and shocks
 
 `docs/index.html` is a standalone mirror: the whole app compiled into one
 self-contained file with no build step, served by GitHub Pages. It goes stale the
@@ -66,8 +69,19 @@ moment `src/data/arms.ts` changes, so regenerate it in the same commit:
 That script (`scripts/build-mirror.mjs`) bundles the app with esbuild, runs the
 Tailwind CLI over `src/app/globals.css`, and wraps both in `scripts/mirror-shell.html`.
 
-An arm sold in more than one configuration gets a `variants` array rather than a
-second row in `ARMS`, so it is not double-counted in the charts. A variant may
+Shocks live in `src/data/shocks.ts` as their own `Shock` interface rather than one
+polymorphic Product type. Almost nothing they publish overlaps with an arm: an arm
+has caster and a joint, a shock has travel, valving and a rebuild clock. They share
+the sourcing model, the meter, the gap board and the cost model, which is the right
+amount of sharing.
+
+Two things about the shock data are deliberate. Shock price is not sortable, because
+some listings are a front pair and some are four corners, so the column would not
+compare. And every shock in the set is sold both with and without adjusters at a
+different part number, which is what the `variants` model below is for.
+
+A part sold in more than one configuration gets a `variants` array rather than a
+second row, so it is not double-counted in the charts. A variant may
 override any field the option actually changes. JD Fabrication is the worked
 example: the $949.99 build swaps rubber inner bushings for sealed uniballs.
 

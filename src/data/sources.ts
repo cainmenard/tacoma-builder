@@ -235,6 +235,54 @@ export const S = {
     label: "N64_Wallmaster's original TacomaWorld analysis",
     url: "https://www.tacomaworld.com/threads/what-are-the-best-upper-control-arms-for-you-semi-engineering-level-comparison-for-3rd-gen.869334/",
   },
+  // --- Shocks. Added because the shock thread asked for the same treatment.
+  shockThread: {
+    label: "Bilstein 8112/8100 vs Fox vs Icon vs King thread",
+    url: "https://www.tacomaworld.com/threads/bilstein-8112-8100-vs-fox-vs-icon-vs-king-%E2%80%93-semi-engineering-level-comparison-for-3rd-gen.869300/",
+  },
+  wewBilstein: {
+    label: "Wheel Every Weekend, Bilstein 8112 front pair",
+    url: "https://www.wheeleveryweekend.com/products/8112-zone-control-coilovers-tacoma-2005-2023-front-pair",
+    quote: "This kit will lift the front of your tacoma 0.4-2.2\". … should average around 100k miles before needing serviced",
+  },
+  wewBilsteinDsa: {
+    label: "Wheel Every Weekend, 8112 DSA+ pair",
+    url: "https://www.wheeleveryweekend.com/products/8112-zone-control-dsa-tacoma-2005-2023-front-pair",
+    quote: "click adjuster knobs for easy and precise dual speed adjustment of both low and high speed compression",
+  },
+  toytecFox: {
+    label: "ToyTec, Fox 880-06-418",
+    url: "https://toyteclifts.com/880-06-418-fox-factory-race-series-front-2-5-reservoir-dsc-coilovers-pair-for-05-23-tacoma.html",
+    quote: "DSC - Dual Speed Compression … 2.5\" Smooth bore and honed seamless alloy reservoir … Requires Upper Control Arm",
+  },
+  iconCoilover: {
+    label: "ICON 58735C, 2.5 VS extended travel CDCV",
+    url: "https://iconvehicledynamics.com/accessory/14637/",
+    quote:
+      "up to 0-2.75\" of lift height adjustability on 2016-2023 models … outfitted with ICON's CDCV which offers 10 points of adjustability",
+  },
+  headstrongKing: {
+    label: "Headstrong Offroad, King 25001-119",
+    url: "https://headstrongoffroad.com/product/king-performance-series-2-5-coilover-with-reservoir-and-optional-compression-adjusters-25001-119-ext-25001-119-650-ext-25001-119-700-ext-25001-119a-ext-25001-119a-650-ext-25001-119a-700-ext/",
+    quote: "optional wide range compression adjuster gives 20 precise clicks of compression damping adjustment",
+  },
+  shockSurplusKingFaq: {
+    label: "Shock Surplus, King shocks FAQ",
+    url: "https://www.shocksurplus.com/blogs/news/king-off-road-shocks-faq",
+    quote:
+      "Racers rebuild their shocks every 1,000-5000 miles, but street / daily drivers can go as long as 50,000 miles. … Typical 2.5 shocks with reservoirs usually runs between $600-800 for a rebuild.",
+  },
+  toytecElka: {
+    label: "ToyTec, Elka LK90001",
+    url: "https://toyteclifts.com/lk90001-elka-suspension-performance-dual-adjustable-front-and-rear-shock-kit-05-tacoma.html",
+    quote: "Dual Adjustable Front and Rear Shock Kit … External remote reservoir with low-friction floating piston … 0-2\" Lift",
+  },
+  accutuneRide: {
+    label: "AccuTune Off-Road, Ride Shocks Tacoma kit",
+    url: "https://accutuneoffroad.com/product/05-23-tacoma-mid-travel-suspension-kit-stage-3a-ride-shocks/",
+    quote:
+      "Ride Shocks 2.5 Coilovers 1.5-2\u2033 lift with DPA Adjusters … After the sale we offer tuning support and one free re-valve",
+  },
   ucaMasterList: {
     label: "TacomaWorld, complete list of UCAs for the 3rd gen",
     url: "https://www.tacomaworld.com/threads/complete-list-of-ucas-for-the-3rd-gen-tacoma.738745/",

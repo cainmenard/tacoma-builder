@@ -11,7 +11,10 @@ import { MetricBoard } from "@/components/Charts";
 import { Gaps } from "@/components/Gaps";
 import { SectionHead } from "@/components/Primitives";
 import { CasterStrip } from "@/components/CasterStrip";
+import { ShockTable } from "@/components/ShockTable";
+import { ShockCost } from "@/components/ShockCost";
 import { ARMS, fieldsAtTier } from "@/data/arms";
+import { SHOCKS } from "@/data/shocks";
 import { known } from "@/data/types";
 import { S } from "@/data/sources";
 
@@ -28,7 +31,7 @@ export default function Page() {
     setPinned((p) => (p.includes(id) ? p.filter((x) => x !== id) : p.length >= 3 ? [...p.slice(1), id] : [...p, id]));
 
   const noCaster = ARMS.filter((a) => !known(a.casterDeg)).length;
-  const measured = fieldsAtTier("independent-test");
+  const measured = fieldsAtTier("independent-test", [...ARMS, ...SHOCKS]);
   const prices = ARMS.filter((a) => known(a.price)).map((a) => a.price.value as number);
 
   return (
@@ -52,9 +55,10 @@ export default function Page() {
 
           <div className="mt-9 flex flex-wrap gap-x-10 gap-y-5">
             <Stat n={`${ARMS.length}`} l="arms compared" />
+            <Stat n={`${SHOCKS.length}`} l="shocks compared" />
             <Stat n={`$${Math.min(...prices)}–$${Math.max(...prices).toLocaleString()}`} l="street price range, Aug 2026" />
             <Stat n={`${noCaster}`} l="with no published caster figure" accent />
-            <Stat n={`${ARMS.reduce((n, a) => n + a.gaps.length, 0)}`} l="specs nobody publishes" accent />
+            <Stat n={`${[...ARMS, ...SHOCKS].reduce((n, p) => n + p.gaps.length, 0)}`} l="specs nobody publishes" accent />
             <Stat n={`${measured}`} l="figures anybody has measured on a truck" accent />
           </div>
 
@@ -115,8 +119,24 @@ export default function Page() {
 
         <section>
           <SectionHead
-            id="charts"
+            id="shocks"
             index="04"
+            title="Shocks, same rules"
+            lede="Requested in the shock thread. Every one of these is sold both with and without adjusters, at a different part number, so the price on the left is one configuration and the sheet underneath shows the rest. Rebuild interval is the number that decides this category, and five of the six do not publish one."
+          />
+          <div className="mt-7">
+            <ShockTable />
+          </div>
+          <div className="mt-7">
+            <div className="eyebrow mb-2.5">What the rebuild clock costs over your miles</div>
+            <ShockCost />
+          </div>
+        </section>
+
+        <section>
+          <SectionHead
+            id="charts"
+            index="05"
             title="One metric at a time"
             lede="Bars are colored by how well sourced the number is, not by rank. Hatched means nothing published at all, and on the caster chart that is most of the board."
           />
@@ -128,7 +148,7 @@ export default function Page() {
         <section>
           <SectionHead
             id="gaps"
-            index="05"
+            index="06"
             title="What we still do not know"
             lede="Everything the research could not source, grouped by what would close it. This list shrinks when somebody who owns a set posts their alignment printout."
           />

@@ -493,14 +493,14 @@ export const ARMS: Arm[] = [
 export const ARMS_BY_ID = Object.fromEntries(ARMS.map((a) => [a.id, a]));
 
 /**
- * How many sourced fields across the whole dataset sit at a given tier.
- * Walks the arm objects rather than naming fields, so it keeps counting
- * correctly as fields are added.
+ * How many sourced fields across a set of parts sit at a given tier.
+ * Walks the objects rather than naming fields, so it keeps counting correctly
+ * as fields are added, and it works for arms and shocks alike.
  */
-export function fieldsAtTier(tier: Confidence): number {
+export function fieldsAtTier(tier: Confidence, parts: object[]): number {
   let n = 0;
-  for (const arm of ARMS) {
-    for (const v of Object.values(arm)) {
+  for (const part of parts) {
+    for (const v of Object.values(part)) {
       if (v && typeof v === "object" && "confidence" in v && (v as { confidence: Confidence }).confidence === tier) n++;
     }
   }

@@ -1,4 +1,4 @@
-import { known, type Arm } from "@/data/types";
+import { known, type Arm, type Shock } from "@/data/types";
 
 export interface CostInputs {
   /** Miles driven per year. */
@@ -87,4 +87,70 @@ export function computeCost(arm: Arm, i: CostInputs): CostBreakdown {
   const total = purchase === null ? null : purchase + greaseCost + jointCost + alignmentCost + i.alignment;
 
   return { arm, purchase, greaseCost, greaseEvents, jointCost, jointEvents, alignmentCost, total, assumed };
+}
+
+
+/**
+ * Shock cost over the same miles.
+ *
+ * Simpler than the arm model: no grease, no alignment, one recurring line item.
+ * The whole argument in the shock thread was that the rebuild clock beats the
+ * sticker price over a long enough ownership, so this computes exactly that and
+ * shows both ends of the interval rather than picking one.
+ */
+export interface ShockCost {
+  shock: Shock;
+  purchase: number | null;
+  /** Rebuilds at the optimistic and pessimistic ends of the published interval. */
+  rebuildsBest: number;
+  rebuildsWorst: number;
+  rebuildCostBest: number;
+  rebuildCostWorst: number;
+  totalBest: number | null;
+  totalWorst: number | null;
+  assumed: string[];
+}
+
+/** Hours a shop books to pull and refit a pair of coilovers. */
+const SHOCK_SWAP_HOURS = 2.0;
+
+export function computeShockCost(shock: Shock, i: CostInputs): ShockCost {
+  const totalMiles = i.milesPerYear * i.years;
+  const assumed: string[] = [];
+
+  const purchase = known(shock.price) ? shock.price.value : null;
+  if (purchase === null) assumed.push("These are not sold as a standalone price, so there is no total to show.");
+
+  let rebuildsBest = 0;
+  let rebuildsWorst = 0;
+  if (known(shock.rebuildIntervalMi)) {
+    const [lo, hi] = shock.rebuildIntervalMi.value;
+    rebuildsWorst = Math.floor(totalMiles / lo);
+    rebuildsBest = Math.floor(totalMiles / hi);
+    if (shock.rebuildIntervalMi.confidence === "community" || shock.rebuildIntervalMi.confidence === "retailer") {
+      assumed.push("The rebuild interval is a seller's or a forum figure, not the manufacturer's.");
+    }
+  } else {
+    assumed.push("Nobody publishes a rebuild interval for these, so no recurring cost is budgeted. That is a gap, not a zero.");
+  }
+
+  const parts = known(shock.rebuildCost) ? shock.rebuildCost.value : null;
+  if (parts === null && (rebuildsBest > 0 || rebuildsWorst > 0)) {
+    assumed.push("No published rebuild price, so the rebuilds are counted but not costed.");
+  }
+  const perEvent = parts === null ? 0 : parts + (i.diy ? 0 : SHOCK_SWAP_HOURS * i.laborRate);
+  const rebuildCostBest = rebuildsBest * perEvent;
+  const rebuildCostWorst = rebuildsWorst * perEvent;
+
+  return {
+    shock,
+    purchase,
+    rebuildsBest,
+    rebuildsWorst,
+    rebuildCostBest,
+    rebuildCostWorst,
+    totalBest: purchase === null ? null : purchase + rebuildCostBest,
+    totalWorst: purchase === null ? null : purchase + rebuildCostWorst,
+    assumed,
+  };
 }
