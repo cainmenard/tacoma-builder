@@ -198,6 +198,7 @@ export function CompareTable({
                     text={known(a.price) ? money(a.price.value) : "no US price"}
                     c={a.price.confidence}
                     muted={!known(a.price)}
+                    suffix={a.variants && a.variants.length > 1 ? `+${a.variants.length - 1} cfg` : undefined}
                   />
                   <Cell
                     text={

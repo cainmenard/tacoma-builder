@@ -141,6 +141,20 @@ export const ARMS: Arm[] = [
         sources: [S.jdFab, S.trailTacomaJdFab],
       },
     ],
+    variants: [
+      {
+        label: "Standard inner pivots",
+        price: f(699.99, "manufacturer", [S.jdFab]),
+        changes: "OEM Toyota rubber bushings at the frame end. JD Fab rates them to 200,000 miles and says they will never squeak.",
+      },
+      {
+        label: "Sealed uniball inner pivots",
+        price: f(949.99, "manufacturer", [S.jdFab]),
+        changes: "$250 more swaps the rubber inner bushings for sealed uniballs, which JD Fab calls the hardcore off-road option. It also changes what the arm rides like, at both ends.",
+        framePivotName: f("Sealed uniball inner pivots", "manufacturer", [S.jdFabBushings]),
+        framePivotFamily: f("spherical", "manufacturer", [S.jdFabBushings]),
+      },
+    ],
     gaps: ["Caster in degrees", "Articulation", "Component weight", "Grease interval", "Rebuild kit price", "Warranty", "Any independent durability report at mileage"],
   },
   {
@@ -296,6 +310,9 @@ export const ARMS: Arm[] = [
     model: "X-Joint",
     partNumber: f("CAM-310078", "retailer", [S.camburgXJoint]),
     blurb: "Race-shop construction with race-shop upkeep. Buy it because you flex it, not because you commute in it.",
+    // Kept separate from the XL below. The XL is a different joint at a different part
+    // number with its own fitment question, which makes it a different arm rather than
+    // an option box on this one. Variants are for a choice you make inside one listing.
     price: f(1099, "retailer", [S.camburgXJoint], "MSRP is $1,579.70 and nobody sells at it."),
     priceRetailer: "TotalZParts",
     msrp: f(1579.7, "retailer", [S.camburgXJoint]),
@@ -323,7 +340,7 @@ export const ARMS: Arm[] = [
     brand: "Camburg",
     model: "X-Joint XL",
     partNumber: f("CAM-310200", "manufacturer", [S.camburgSite]),
-    blurb: "Same arm, bigger joint. Verify the fitment by phone before you spend the money.",
+    blurb: "Same tube, bigger joint, its own part number. Verify the fitment by phone before you spend the money.",
     price: f(1199.56, "retailer", [S.camburgXL], "Single-sourced. TeqSport sells part CAM310200 at this price but labels the fitment 2005-2011. Camburg's own page lists CAM-310200 as a 2005-2023 kit. Call before you buy."),
     priceRetailer: "TeqSport",
     material: f("4130 chromoly", "retailer", [S.camburgXL]),
@@ -345,7 +362,7 @@ export const ARMS: Arm[] = [
     fieldReports: [
       {
         tone: "concern",
-        text: "Price is single-sourced from a listing whose own fitment text contradicts the manufacturer's. Treat the number as provisional.",
+        text: "Price is single-sourced from a listing whose own fitment text contradicts the manufacturer's. TeqSport labels CAM-310200 as a 2005-2011 part; Camburg's own page lists it as 2005-2023. That unresolved fitment is the clearest reason this is tracked as its own arm rather than an option on the X-Joint. Treat the number as provisional and call before you buy.",
         sources: [S.camburgXL, S.camburgSite],
       },
     ],
@@ -477,3 +494,18 @@ export const ARMS: Arm[] = [
 ];
 
 export const ARMS_BY_ID = Object.fromEntries(ARMS.map((a) => [a.id, a]));
+
+/**
+ * How many sourced fields across a set of parts sit at a given tier.
+ * Walks the objects rather than naming fields, so it keeps counting correctly
+ * as fields are added, and it works for arms and shocks alike.
+ */
+export function fieldsAtTier(tier: Confidence, parts: object[]): number {
+  let n = 0;
+  for (const part of parts) {
+    for (const v of Object.values(part)) {
+      if (v && typeof v === "object" && "confidence" in v && (v as { confidence: Confidence }).confidence === tier) n++;
+    }
+  }
+  return n;
+}

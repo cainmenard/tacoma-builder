@@ -104,7 +104,11 @@ export function scoreArms(a: Answers): Scored[] {
       const adjustable = known(arm.casterAdjustable) && arm.casterAdjustable.value;
       const need = lift >= 3 ? 3 : lift >= 2 ? 2.5 : 0;
       if (hi >= need) {
-        const conf = arm.casterDeg.confidence === "manufacturer" ? 6 : arm.casterDeg.confidence === "retailer" ? 4 : 3;
+        const conf =
+          arm.casterDeg.confidence === "independent-test" ? 7
+            : arm.casterDeg.confidence === "manufacturer" ? 6
+              : arm.casterDeg.confidence === "retailer" ? 4
+                : 3;
         lines.push({
           label: "Caster",
           points: conf,

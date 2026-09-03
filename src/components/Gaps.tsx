@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ARMS } from "@/data/arms";
+import { SHOCKS } from "@/data/shocks";
 import { S } from "@/data/sources";
 
 /**
@@ -13,11 +14,11 @@ export function Gaps() {
 
   const byTopic = useMemo(() => {
     const map = new Map<string, Set<string>>();
-    for (const arm of ARMS) {
-      for (const g of arm.gaps) {
+    for (const part of [...ARMS, ...SHOCKS]) {
+      for (const g of part.gaps) {
         const topic = normalize(g);
         const set = map.get(topic) ?? new Set<string>();
-        set.add(`${arm.brand} ${arm.model}`);
+        set.add(`${part.brand} ${part.model}`);
         map.set(topic, set);
       }
     }
@@ -26,14 +27,15 @@ export function Gaps() {
       .sort((a, b) => b[1].length - a[1].length);
   }, []);
 
-  const total = ARMS.reduce((n, a) => n + a.gaps.length, 0);
+  const total = [...ARMS, ...SHOCKS].reduce((n, p) => n + p.gaps.length, 0);
 
   const post = useMemo(() => {
     const lines = [
-      "Running one of these arms? Two numbers from you close a hole in the data:",
+      "Running one of these arms or shocks? A few numbers from you close a hole in the data:",
       "",
       "1. Your alignment printout, before and after. That gives us caster in degrees, which is the number almost nobody publishes.",
       "2. The arms on a bathroom scale, out of the box, both arms together.",
+      "3. On shocks: what your rebuild actually cost, and the odometer reading when you sent them in.",
       "",
       "The biggest holes right now:",
       ...byTopic.slice(0, 5).map(([topic, arms]) => `- ${topic}: ${arms.length} arms (${arms.slice(0, 3).join(", ")}${arms.length > 3 ? ", and more" : ""})`),
@@ -49,8 +51,8 @@ export function Gaps() {
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <span className="display text-[2.6rem]" style={{ color: "var(--accent)" }}>{total}</span>
           <span className="max-w-[46ch] text-[14px] leading-relaxed text-ink-2">
-            specs across 14 arms that nobody publishes. Not estimated, not inferred, not quietly rounded into something
-            that looks like data. Listed.
+            specs across {ARMS.length} arms and {SHOCKS.length} shocks that nobody publishes. Not estimated, not inferred,
+            not quietly rounded into something that looks like data. Listed.
           </span>
         </div>
       </div>
@@ -123,6 +125,10 @@ function normalize(g: string): string {
   if (s.includes("durability") || s.includes("failure") || s.includes("tire")) return "Independent durability evidence";
   if (s.includes("retrofit") || s.includes("2016-2021")) return "Fitment confirmation";
   if (s.includes("frame-side") || s.includes("pivot") || s.includes("bushing")) return "Frame-side pivot";
+  if (s.includes("rebuild interval") || s.includes("service claim")) return "Rebuild interval";
+  if (s.includes("coil rate") || s.includes("spring rate")) return "Published coil rate options";
+  if (s.includes("travel")) return "Shock travel";
+  if (s.includes("reservoir")) return "Reservoir type";
   if (s.includes("maintenance")) return "Maintenance requirement";
   if (s.includes("ball joint brand")) return "Joint brand and serviceability";
   return g;
